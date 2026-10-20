@@ -46,21 +46,29 @@
         .doc-icon { color: var(--primary); width: 20px; text-align: center; font-size: 1.1rem; }
 
         .main { flex: 1; display: flex; flex-direction: column; background: var(--bg-body); }
-        .header { padding: 14px 24px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
-        .btn { padding: 8px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); cursor: pointer; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
+        .header { padding: 12px 20px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        
+        .zoom-controls { display: flex; align-items: center; gap: 6px; background: var(--bg-body); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); }
+        .btn { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); cursor: pointer; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
         .btn:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-icon { padding: 6px 10px; }
 
-        .viewer-canvas { flex: 1; padding: 20px; display: flex; }
-        .viewer-card { width: 100%; height: 100%; background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        iframe { width: 100%; height: 100%; border: none; }
+        .viewer-canvas { flex: 1; padding: 15px; display: flex; overflow: hidden; }
+        .viewer-card { width: 100%; height: 100%; background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: auto; position: relative; }
+        
+        /* Isolated Zoom Container */
+        .iframe-wrapper { width: 100%; height: 100%; transform-origin: top left; transition: transform 0.15s ease-out; }
+        .iframe-wrapper iframe { width: 100%; height: 100%; border: none; }
 
-        .placeholder { text-align: center; color: var(--text-muted); }
+        .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; color: var(--text-muted); }
         .theme-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
 
         @media (max-width: 768px) {
             body { flex-direction: column; }
-            .sidebar { width: 100%; height: 45vh; }
+            .sidebar { width: 100%; height: 40vh; }
             .viewer-canvas { padding: 10px; }
+            .header { padding: 10px 15px; }
+            .zoom-controls { width: 100%; justify-content: space-between; }
         }
     </style>
 </head>
@@ -79,13 +87,22 @@
 
     <main class="main">
         <header class="header">
-            <h2 id="doc-title" style="font-size: 1.1rem;">Select a Document</h2>
-            <div style="display: flex; gap: 8px;">
+            <h2 id="doc-title" style="font-size: 1rem;">Select a Document</h2>
+            
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <div class="zoom-controls" id="zoom-bar" style="display:none;">
+                    <button class="btn btn-icon" onclick="adjustZoom(-0.25)" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
+                    <span id="zoom-level" style="font-size:0.8rem; font-weight:600; min-width:42px; text-align:center;">100%</span>
+                    <button class="btn btn-icon" onclick="adjustZoom(0.25)" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+                    <button class="btn btn-icon" onclick="resetZoom()" title="Reset Zoom"><i class="fas fa-undo"></i></button>
+                </div>
+
                 <a href="#" id="open-drive-btn" target="_blank" class="btn" style="display:none;">
-                    <i class="fab fa-google-drive"></i> Open in Drive
+                    <i class="fab fa-google-drive"></i> Open
                 </a>
             </div>
         </header>
+
         <section class="viewer-canvas">
             <div class="viewer-card" id="viewer">
                 <div class="placeholder">
@@ -155,6 +172,7 @@
         ];
 
         let activeDoc = null;
+        let currentZoom = 1;
 
         function renderList(items) {
             const listEl = document.getElementById('doc-list');
@@ -194,6 +212,7 @@
             const driveBtn = document.getElementById('open-drive-btn');
             driveBtn.href = doc.driveUrl;
             driveBtn.style.display = 'inline-flex';
+            document.getElementById('zoom-bar').style.display = 'inline-flex';
 
             let previewUrl = doc.driveUrl;
             if (previewUrl.includes('/view')) {
@@ -202,8 +221,37 @@
                 previewUrl = previewUrl + '/preview';
             }
 
-            document.getElementById('viewer').innerHTML = `<iframe src="${previewUrl}" allow="autoplay"></iframe>`;
+            document.getElementById('viewer').innerHTML = `
+                <div class="iframe-wrapper" id="iframe-wrapper">
+                    <iframe src="${previewUrl}" allow="autoplay"></iframe>
+                </div>
+            `;
+            
+            resetZoom();
             renderList(DOCUMENTS_MANIFEST);
+        }
+
+        function adjustZoom(delta) {
+            currentZoom = Math.min(Math.max(0.75, currentZoom + delta), 3.0);
+            applyZoom();
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            applyZoom();
+        }
+
+        function applyZoom() {
+            const wrapper = document.getElementById('iframe-wrapper');
+            const zoomText = document.getElementById('zoom-level');
+            if (wrapper) {
+                wrapper.style.transform = `scale(${currentZoom})`;
+                wrapper.style.width = `${100 / currentZoom}%`;
+                wrapper.style.height = `${100 / currentZoom}%`;
+            }
+            if (zoomText) {
+                zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
+            }
         }
 
         function filterDocs() {
