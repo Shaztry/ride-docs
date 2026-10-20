@@ -55,7 +55,6 @@
             overflow: hidden;
         }
 
-        /* Scroll-Driven Road Track Background */
         .road-bg {
             position: absolute;
             top: 0;
@@ -117,7 +116,6 @@
             padding: 0 10px;
         }
 
-        /* Scroll-Driven Rider Movement */
         .rider-box {
             position: relative;
             z-index: 2;
@@ -128,7 +126,6 @@
             transition: transform 0.05s ease-out;
         }
 
-        /* Action Buttons */
         .cta-btn {
             position: relative;
             z-index: 2;
@@ -189,7 +186,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Sidebar Navigation */
         .sidebar {
             width: 100%;
             max-width: 600px;
@@ -247,14 +243,13 @@
         .doc-card.active { background: var(--bg-card); border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .doc-icon { font-size: 1.2rem; color: var(--primary); width: 24px; text-align: center; }
 
-        /* Custom Vehicle Accent Badges */
         .badge-rtr { color: var(--accent-rtr); }
         .badge-activa { color: var(--accent-activa); }
 
-        /* Main Viewer Area (Hidden by Default) */
+        /* Main Viewer Area */
         .main-viewer {
             flex: 1;
-            display: none; /* Only appears when document is selected */
+            display: none;
             flex-direction: column;
             background: var(--bg-body);
             animation: fadeIn 0.25s ease-in-out;
@@ -307,11 +302,44 @@
         .btn-close { border-color: rgba(239, 68, 68, 0.4); color: var(--accent-rtr); }
         .btn-close:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--accent-rtr); color: var(--accent-rtr); }
 
-        .viewer-canvas { flex: 1; padding: 15px; display: flex; overflow: hidden; }
-        .viewer-frame-card { width: 100%; height: 100%; min-height: 70vh; background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: auto; position: relative; }
+        /* Fixed Viewport Heights to Prevent Collapse */
+        .viewer-canvas {
+            flex: 1;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            height: 75vh;
+            min-height: 520px;
+        }
 
-        .iframe-container { width: 100%; height: 100%; transform-origin: top left; transition: transform 0.15s ease-out; }
-        .iframe-container iframe { width: 100%; height: 100%; border: none; }
+        .viewer-frame-card {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+            background: var(--bg-surface);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            min-height: 480px;
+        }
+
+        .iframe-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: top left;
+            transition: transform 0.15s ease-out;
+        }
+
+        .iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
 
         .theme-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
 
@@ -319,9 +347,30 @@
             .hero-title { font-size: 2.2rem; }
             .vault-container { flex-direction: column; min-height: auto; }
             .sidebar { max-width: 100% !important; border-right: none; }
-            .main-viewer.active { height: 75vh; border-top: 1px solid var(--border); }
-            .viewer-canvas { padding: 10px; }
+            .vault-container.has-active-doc .sidebar { display: none; }
+            .main-viewer, .viewer-canvas, .viewer-frame-card { min-width: 0; }
+            
+            .main-viewer.active {
+                height: 80vh;
+                min-height: 550px;
+                border-top: 1px solid var(--border);
+            }
+            .viewer-canvas {
+                padding: 8px;
+                height: calc(80vh - 60px);
+                min-height: 500px;
+            }
+            .viewer-frame-card {
+                min-height: 480px;
+            }
             .viewer-bar { padding: 10px 14px; }
+            .viewer-bar > div { max-width: 100%; }
+        }
+
+        .last-updated {
+            margin: -18px 0 20px;
+            color: var(--text-muted);
+            font-size: 0.75rem;
         }
     </style>
 </head>
@@ -340,6 +389,10 @@
             
             <p class="hero-subtitle">
                 Instant, zero-delay access to Driver's License, Vehicle Registration (RC), Insurance, and Emission certificates for road checks.
+            </p>
+            
+            <p class="last-updated">
+                Last updated: <time>2026-10-20 14:21:37.790010298 +0530</time>
             </p>
 
             <div class="rider-box" id="rider-box">
@@ -363,14 +416,14 @@
 
         <div class="vault-container" id="vault-container">
             <!-- Sidebar -->
-            <aside class="sidebar">
+            <aside class="sidebar" id="sidebar">
                 <div class="search-box">
                     <input type="text" id="search" placeholder="Search RC, Insurance, DL..." onkeyup="filterDocs()">
                 </div>
                 <div class="doc-list" id="doc-list"></div>
             </aside>
 
-            <!-- Main Document Viewer (Appears ONLY when a document is selected) -->
+            <!-- Main Document Viewer -->
             <main class="main-viewer" id="main-viewer">
                 <header class="viewer-bar">
                     <h2 id="doc-title" style="font-size: 1rem; font-weight:700;">Select a Document</h2>
@@ -539,13 +592,12 @@
                 </div>
             `;
 
-            // Reveal the Document Viewer Area
             const viewerArea = document.getElementById('main-viewer');
             const container = document.getElementById('vault-container');
+            
             viewerArea.classList.add('active');
             container.classList.add('has-active-doc');
 
-            // Smooth scroll down to viewer on mobile
             if (window.innerWidth <= 768) {
                 viewerArea.scrollIntoView({ behavior: 'smooth' });
             }
