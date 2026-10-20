@@ -165,6 +165,8 @@
         }
         .doc-card:hover { background: var(--surface-hover); }
         .doc-card.active { border-color: rgba(115, 224, 195, 0.32); background: rgba(115, 224, 195, 0.08); }
+        .doc-card.removed-doc { color: var(--muted); cursor: default; }
+        .removed-label { margin-left: auto; color: var(--muted); font-size: 0.64rem; white-space: nowrap; }
         .doc-icon { width: 30px; height: 30px; flex: 0 0 30px; display: grid; place-items: center; border: 1px solid var(--line); color: var(--mint); font-size: 0.79rem; }
         .doc-card-copy { min-width: 0; flex: 1; }
         .doc-title { display: block; overflow-wrap: anywhere; font-size: 0.77rem; font-weight: 600; line-height: 1.35; }
@@ -345,26 +347,26 @@
                         title: 'DL',
                         icon: 'fa-id-badge',
                         documents: [
-                            { id: 'dl-1', title: 'Driver License', driveUrl: 'https://drive.google.com/file/d/1Ot8xOTzVfb9RUC_rp7vpPVu3YkK-lT6C/view?usp=drivesdk', icon: 'fa-id-card' },
-                            { id: 'dl-2', title: 'DigiLocker Driver License', driveUrl: 'https://drive.google.com/file/d/1CqEqcqYx74lZzhxl0-tn9QHtfi4GImu3/view?usp=drive_link', icon: 'fa-id-card' }
+                            { id: 'dl-1', title: 'Driver License', linkRemoved: true, icon: 'fa-id-card' },
+                            { id: 'dl-2', title: 'DigiLocker Driver License', linkRemoved: true, icon: 'fa-id-card' }
                         ]
                     },
                     {
                         title: 'RTR',
                         icon: 'fa-motorcycle',
                         documents: [
-                            { id: 'rtr-rc', title: 'Registration RC (Apache RTR 160)', driveUrl: 'https://drive.google.com/file/d/1MW6PdGRyxNlYlq5w6Xtwcqvf5ONXBPN1/view?usp=drivesdk', icon: 'fa-file-contract badge-rtr' },
-                            { id: 'rtr-ins', title: 'Insurance Policy (Apache RTR)', driveUrl: 'https://drive.google.com/file/d/1cUR2bsfh0rOkVby-vI7mSTSHhMh5xeRA/view?usp=drivesdk', icon: 'fa-file-shield badge-rtr' },
-                            { id: 'rtr-puc', title: 'Emission Certificate (Apache RTR)', driveUrl: 'https://drive.google.com/file/d/1zlibITeAC1hdJQQw6RzDHkKB2LJO3-rj/view?usp=drivesdk', icon: 'fa-smog badge-rtr' }
+                            { id: 'rtr-rc', title: 'Registration RC (Apache RTR 160)', linkRemoved: true, icon: 'fa-file-contract badge-rtr' },
+                            { id: 'rtr-ins', title: 'Insurance Policy (Apache RTR)', linkRemoved: true, icon: 'fa-file-shield badge-rtr' },
+                            { id: 'rtr-puc', title: 'Emission Certificate (Apache RTR)', linkRemoved: true, icon: 'fa-smog badge-rtr' }
                         ]
                     },
                     {
                         title: 'Activa',
                         icon: 'fa-gauge-high',
                         documents: [
-                            { id: 'activa-rc', title: 'Registration RC (Honda Activa)', driveUrl: 'https://drive.google.com/file/d/1MrAnuxqsCeEDstR2avHqRVAh_7-VDfFg/view?usp=drivesdk', icon: 'fa-file-contract badge-activa' },
-                            { id: 'activa-ins', title: 'Insurance Certificate (Activa)', driveUrl: 'https://drive.google.com/file/d/147FgIkQtKzW7fWcqT7zRuLwa65g5cfqR/view?usp=drivesdk', icon: 'fa-file-shield badge-activa' },
-                            { id: 'activa-puc', title: 'Emission Certificate (Activa)', driveUrl: 'https://drive.google.com/file/d/1QbiBRbF-awVA3L0oDzmQ-1u6K282ccD5/view?usp=drivesdk', icon: 'fa-smog badge-activa' }
+                            { id: 'activa-rc', title: 'Registration RC (Honda Activa)', linkRemoved: true, icon: 'fa-file-contract badge-activa' },
+                            { id: 'activa-ins', title: 'Insurance Certificate (Activa)', linkRemoved: true, icon: 'fa-file-shield badge-activa' },
+                            { id: 'activa-puc', title: 'Emission Certificate (Activa)', linkRemoved: true, icon: 'fa-smog badge-activa' }
                         ]
                     }
                 ]
@@ -373,26 +375,26 @@
                 title: 'My Aadhaar',
                 icon: 'fa-id-card',
                 groups: [
-                    { title: 'Husband', icon: 'fa-user', placeholder: 'Husband', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Wife', icon: 'fa-user', placeholder: 'Wife', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Father', icon: 'fa-user', placeholder: 'Father', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Mother', icon: 'fa-user', placeholder: 'Mother', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Atthe', icon: 'fa-user', placeholder: 'Atthe', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Mava', icon: 'fa-user', placeholder: 'Mava', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' }
+                    { title: 'Husband', icon: 'fa-user', placeholder: 'Husband', linkRemoved: true },
+                    { title: 'Wife', icon: 'fa-user', placeholder: 'Wife', linkRemoved: true },
+                    { title: 'Father', icon: 'fa-user', placeholder: 'Father', linkRemoved: true },
+                    { title: 'Mother', icon: 'fa-user', placeholder: 'Mother', linkRemoved: true },
+                    { title: 'Atthe', icon: 'fa-user', placeholder: 'Atthe', linkRemoved: true },
+                    { title: 'Mava', icon: 'fa-user', placeholder: 'Mava', linkRemoved: true }
                 ]
             },
             {
                 title: 'Voter ID',
                 icon: 'fa-id-card',
                 groups: [
-                    { title: 'Husband', icon: 'fa-user', placeholder: 'Husband', driveUrl: 'https://drive.google.com/file/d/1qa9ILuiGIw940tSdZFM3WRO5djwNPxL6/view?usp=drive_link' },                ]
+                    { title: 'Husband', icon: 'fa-user', placeholder: 'Husband', linkRemoved: true },                ]
             },
             {
                 title: 'Resume',
                 icon: 'fa-briefcase',
                 groups: [
-                    { title: 'Husband', icon: 'fa-user', placeholder: 'Resume Husband', driveUrl: 'https://drive.google.com/file/d/17D909RW4kMe0F95Je0R_aLHbvS7DeP2-/view?usp=drive_link' },
-                    { title: 'Wife', icon: 'fa-user', placeholder: 'Resume Wife', driveUrl: 'https://drive.google.com/file/d/11VnOI7Gs52NVRZaKVR9o0P7eEzNJLSId/view?usp=drive_link' },
+                    { title: 'Husband', icon: 'fa-user', placeholder: 'Resume Husband', linkRemoved: true },
+                    { title: 'Wife', icon: 'fa-user', placeholder: 'Resume Wife', linkRemoved: true },
                 ]
             },
             {
@@ -408,7 +410,7 @@
                         title: 'Affidavit',
                         icon: 'fa-id-badge',
                         documents: [
-                            { id: 'name-change', title: 'Name Change', driveUrl: 'https://drive.google.com/file/d/1unVXMdgFixqXWqT271VlHNA8NorD_DTV/view?usp=drive_link', icon: 'fa-file-signature' }
+                            { id: 'name-change', title: 'Name Change', linkRemoved: true, icon: 'fa-file-signature' }
                         ]
                     }
                 ]
@@ -418,11 +420,12 @@
         const DOCUMENTS_MANIFEST = ARCHIVE_SECTIONS.flatMap(section =>
             (section.groups || []).flatMap(group => {
                 const documents = [...(group.documents || [])];
-                if (group.driveUrl) {
+                if (group.driveUrl || group.linkRemoved) {
                     documents.push({
                         id: `${section.title}-${group.title}`.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
                         title: group.placeholder || group.title,
                         driveUrl: group.driveUrl,
+                        linkRemoved: group.linkRemoved,
                         icon: group.documentIcon || group.icon || 'fa-file'
                     });
                 }
@@ -449,6 +452,18 @@
         }
 
         function createDocumentCard(doc) {
+            if (doc.linkRemoved) {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'doc-card removed-doc';
+                placeholder.setAttribute('aria-disabled', 'true');
+                placeholder.innerHTML = `
+                    <span class="doc-icon"><i class="fa-solid ${doc.icon}"></i></span>
+                    <span class="doc-card-copy"><span class="doc-title">${doc.title}</span></span>
+                    <span class="removed-label">Link removed</span>
+                `;
+                return placeholder;
+            }
+
             const card = document.createElement('button');
             card.type = 'button';
             card.className = `doc-card ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
@@ -479,7 +494,7 @@
             for (const sectionConfig of ARCHIVE_SECTIONS) {
                 const sectionDocs = items.filter(doc => doc.section === sectionConfig.title);
                 const configuredGroups = sectionConfig.groups || [];
-                const hasPlaceholders = !query && configuredGroups.some(group => group.placeholder && !group.driveUrl);
+                const hasPlaceholders = !query && configuredGroups.some(group => group.placeholder && !group.driveUrl && !group.linkRemoved);
                 if (!sectionDocs.length && !hasPlaceholders && !sectionConfig.message) continue;
 
                 const activeInSection = activeDoc && sectionDocs.some(doc => doc.id === activeDoc.id);
@@ -508,10 +523,10 @@
 
                 for (const groupConfig of configuredGroups) {
                     const groupDocs = sectionDocs.filter(doc => doc.category === groupConfig.title);
-                    const hasPlaceholder = groupConfig.placeholder && !groupConfig.driveUrl;
+                    const hasPlaceholder = groupConfig.placeholder && !groupConfig.driveUrl && !groupConfig.linkRemoved;
                     if (!groupDocs.length && (!hasPlaceholder || query)) continue;
 
-                    if (groupDocs.length === 1 && !hasPlaceholder) {
+                    if (groupDocs.length === 1 && (!hasPlaceholder || groupDocs[0].linkRemoved)) {
                         sectionContent.appendChild(createDocumentCard(groupDocs[0]));
                         continue;
                     }
