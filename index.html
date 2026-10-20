@@ -3,644 +3,577 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Vault - Shaztry</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#101819">
+    <title>Ride Vault | Personal Archive</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-body: #0b0f17;
-            --bg-surface: #151c28;
-            --bg-card: #1e293b;
-            --bg-hover: #334155;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border: #26334d;
-            --primary: #38bdf8;
-            --primary-glow: rgba(56, 189, 248, 0.25);
-            --accent-rtr: #ef4444;
-            --accent-activa: #eab308;
-            --radius: 14px;
+            --bg: #101819;
+            --surface: #172223;
+            --surface-raised: #1d2b2b;
+            --surface-hover: #263737;
+            --text: #edf5ef;
+            --muted: #9aadaa;
+            --line: #2b3a39;
+            --mint: #73e0c3;
+            --lime: #d4ef78;
+            --red: #ff786d;
+            --shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
         }
 
         [data-theme="light"] {
-            --bg-body: #f1f5f9;
-            --bg-surface: #ffffff;
-            --bg-card: #f8fafc;
-            --bg-hover: #e2e8f0;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #cbd5e1;
-            --primary: #0284c7;
-            --primary-glow: rgba(2, 132, 199, 0.2);
-            --accent-rtr: #dc2626;
-            --accent-activa: #ca8a04;
+            --bg: #eef2ec;
+            --surface: #f8faf6;
+            --surface-raised: #ffffff;
+            --surface-hover: #e8efea;
+            --text: #172321;
+            --muted: #63716d;
+            --line: #d6dfd9;
+            --mint: #087e69;
+            --lime: #55751e;
+            --red: #c84038;
+            --shadow: 0 24px 70px rgba(28, 51, 43, 0.1);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { box-sizing: border-box; }
         html { scroll-behavior: smooth; }
-        body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
-
-        /* HERO SECTION */
-        .hero {
-            position: relative;
+        body {
             min-height: 100vh;
-            min-height: 100dvh;
+            margin: 0;
+            background-color: var(--bg);
+            background-image: linear-gradient(rgba(115, 224, 195, 0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(115, 224, 195, 0.025) 1px, transparent 1px);
+            background-size: 36px 36px;
+            color: var(--text);
+            transition: background-color 180ms ease, color 180ms ease;
+        }
+
+        button { color: inherit; }
+        .app-shell { width: min(1520px, 100%); margin: 0 auto; padding: 0 36px 40px; }
+
+        .topbar {
+            min-height: 74px;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
-            text-align: center;
-            padding: 30px 20px 50px;
-            background: radial-gradient(circle at top, var(--bg-surface) 0%, var(--bg-body) 100%);
-            overflow: hidden;
+            gap: 20px;
+            border-bottom: 1px solid var(--line);
         }
-
-        .road-bg {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 140px;
-            height: 100%;
-            background-image: repeating-linear-gradient(
-                to bottom,
-                transparent 0px,
-                transparent 30px,
-                var(--border) 30px,
-                var(--border) 60px
-            );
-            background-position-y: 0px;
-            opacity: 0.35;
-            z-index: 1;
-            will-change: background-position-y;
+        .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+        .brand-mark {
+            width: 40px;
+            aspect-ratio: 1;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(115, 224, 195, 0.5);
+            color: var(--mint);
+            background: rgba(115, 224, 195, 0.08);
+            transform: rotate(-5deg);
         }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 600px;
-            margin-top: auto;
-            margin-bottom: auto;
+        .brand-copy { display: grid; gap: 2px; }
+        .brand-name { font-size: 0.9rem; font-weight: 700; letter-spacing: 0.06em; }
+        .brand-sub { color: var(--muted); font-size: 0.67rem; letter-spacing: 0.16em; text-transform: uppercase; }
+        .topbar-right { display: flex; align-items: center; gap: 18px; }
+        .archive-status { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; }
+        .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 12px var(--lime); }
+        .icon-button {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--muted);
+            cursor: pointer;
+            transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
         }
+        .icon-button:hover { color: var(--mint); border-color: var(--mint); background: var(--surface-raised); }
 
-        .badge-dev {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 14px;
-            border-radius: 30px;
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            font-size: 0.82rem;
-            color: var(--primary);
+        .page-intro { padding: 38px 0 24px; }
+        .eyebrow { display: flex; align-items: center; gap: 9px; color: var(--mint); font-size: 0.69rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; }
+        .eyebrow::before { width: 22px; height: 1px; background: var(--mint); content: ''; }
+        .intro-row { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-top: 9px; }
+        h1 {
+            margin: 0;
+            font-size: 2.7rem;
             font-weight: 600;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px var(--primary-glow);
+            line-height: 0.95;
+            letter-spacing: 0;
         }
+        .intro-note { max-width: 310px; margin: 0 0 3px; color: var(--muted); font-size: 0.83rem; line-height: 1.6; }
 
-        .hero-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 15px;
-            background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .workspace {
+            display: grid;
+            grid-template-columns: minmax(290px, 360px) minmax(0, 1fr);
+            align-items: stretch;
+            gap: 18px;
+            min-height: 650px;
         }
-
-        .hero-subtitle {
-            font-size: 1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            margin-bottom: 30px;
-            padding: 0 10px;
-        }
-
-        .rider-box {
-            position: relative;
-            z-index: 2;
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin: 20px 0;
-            will-change: transform;
-            transition: transform 0.05s ease-out;
-        }
-
-        .cta-btn {
-            position: relative;
-            z-index: 2;
-            padding: 14px 32px;
-            border-radius: 40px;
-            border: none;
-            background: var(--primary);
-            color: #ffffff;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 10px 25px var(--primary-glow);
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px var(--primary-glow);
-        }
-
-        /* VAULT DASHBOARD SECTION */
-        .vault-section {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: var(--bg-body);
-            border-top: 1px solid var(--border);
-        }
-
-        .vault-header {
-            padding: 16px 20px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        .brand-logo {
-            font-size: 1.1rem;
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .vault-container {
-            display: flex;
-            flex: 1;
-            min-height: calc(100vh - 65px);
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar {
+        .library { min-width: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
+        .library-head { padding: 20px 18px 15px; border-bottom: 1px solid var(--line); background: var(--surface-raised); }
+        .section-label { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .section-title { font-size: 0.77rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+        .file-count { color: var(--mint); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; }
+        .search-wrap { position: relative; margin-top: 16px; }
+        .search-wrap i { position: absolute; top: 50%; left: 12px; color: var(--muted); font-size: 0.8rem; transform: translateY(-50%); }
+        .search-input {
             width: 100%;
-            max-width: 600px;
-            background: var(--bg-surface);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            transition: all 0.3s ease;
-        }
-
-        .vault-container.has-active-doc .sidebar {
-            max-width: 340px;
-        }
-
-        .search-box { padding: 14px 16px; border-bottom: 1px solid var(--border); }
-        .search-box input {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--bg-body);
-            color: var(--text-main);
+            min-width: 0;
+            height: 40px;
+            padding: 0 12px 0 35px;
+            border: 1px solid var(--line);
             outline: none;
-            font-size: 0.9rem;
-        }
-
-        .doc-list { flex: 1; overflow-y: auto; padding: 12px 16px; }
-        
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 14px 12px 6px;
+            background: var(--bg);
+            color: var(--text);
             font-size: 0.78rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
         }
-
+        .search-input:focus { border-color: var(--mint); box-shadow: 0 0 0 3px rgba(115, 224, 195, 0.1); }
+        .search-input::placeholder { color: var(--muted); }
+        .doc-list { flex: 1; overflow-y: auto; padding: 12px; }
+        .archive-accordion { margin-bottom: 9px; overflow: hidden; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-raised); }
+        .archive-accordion > summary, .nested-accordion > summary { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 12px; cursor: pointer; list-style: none; }
+        .archive-accordion > summary::-webkit-details-marker, .nested-accordion > summary::-webkit-details-marker { display: none; }
+        .summary-icon { width: 30px; height: 30px; display: grid; flex: 0 0 30px; place-items: center; border: 1px solid var(--line); color: var(--mint); }
+        .summary-title { font-size: 0.79rem; font-weight: 700; }
+        .summary-count { margin-left: auto; color: var(--muted); font-size: 0.67rem; white-space: nowrap; }
+        .disclosure-arrow { color: var(--muted); font-size: 0.68rem; transition: transform 160ms ease; }
+        details[open] > summary .disclosure-arrow { transform: rotate(180deg); }
+        .archive-accordion[open] > summary { border-bottom: 1px solid var(--line); }
+        .accordion-content { padding: 5px 9px 9px; }
+        .nested-accordion { border-bottom: 1px solid var(--line); }
+        .nested-accordion:last-child { border-bottom: 0; }
+        .nested-accordion > summary { min-height: 42px; padding: 0 4px; color: var(--muted); }
+        .nested-accordion > summary .summary-icon { width: 25px; height: 25px; flex-basis: 25px; border: 0; font-size: 0.75rem; }
+        .nested-accordion > summary .summary-title { color: var(--text); font-size: 0.73rem; }
+        .nested-content { padding: 0 2px 8px 34px; }
+        .placeholder-entry { display: flex; align-items: center; gap: 9px; min-height: 36px; padding: 5px 2px; color: var(--text); font-size: 0.74rem; }
+        .placeholder-entry span:last-child { margin-left: auto; color: var(--muted); font-size: 0.64rem; white-space: nowrap; }
+        .coming-soon { margin: 5px 2px 8px; padding: 13px; border: 1px dashed var(--line); border-radius: 7px; color: var(--muted); font-size: 0.75rem; }
         .doc-card {
-            padding: 14px 16px;
-            margin-bottom: 8px;
-            border-radius: 10px;
+            width: 100%;
+            min-width: 0;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 11px;
+            margin: 2px 0;
+            padding: 10px 9px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text);
+            text-align: left;
             cursor: pointer;
-            background: var(--bg-body);
-            border: 1px solid var(--border);
-            transition: all 0.15s ease;
+            transition: background 140ms ease, border-color 140ms ease;
         }
+        .doc-card:hover { background: var(--surface-hover); }
+        .doc-card.active { border-color: rgba(115, 224, 195, 0.32); background: rgba(115, 224, 195, 0.08); }
+        .doc-icon { width: 30px; height: 30px; flex: 0 0 30px; display: grid; place-items: center; border: 1px solid var(--line); color: var(--mint); font-size: 0.79rem; }
+        .doc-card-copy { min-width: 0; flex: 1; }
+        .doc-title { display: block; overflow-wrap: anywhere; font-size: 0.77rem; font-weight: 600; line-height: 1.35; }
+        .doc-card.active .doc-title { color: var(--mint); }
+        .doc-chevron { color: var(--muted); font-size: 0.65rem; }
+        .empty-search { padding: 18px 9px; color: var(--muted); font-size: 0.78rem; }
 
-        .doc-card:hover { background: var(--bg-card); border-color: var(--primary); }
-        .doc-card.active { background: var(--bg-card); border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .doc-icon { font-size: 1.2rem; color: var(--primary); width: 24px; text-align: center; }
-
-        .badge-rtr { color: var(--accent-rtr); }
-        .badge-activa { color: var(--accent-activa); }
-
-        /* Main Viewer Area */
-        .main-viewer {
-            flex: 1;
-            display: none;
-            flex-direction: column;
-            background: var(--bg-body);
-            animation: fadeIn 0.25s ease-in-out;
-        }
-
-        .main-viewer.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .viewer-bar {
-            padding: 12px 20px;
-            background: var(--bg-surface);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .zoom-controls {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-body);
-            padding: 4px 8px;
-            border-radius: 8px;
-            border: 1px solid var(--border);
-        }
-
-        .btn-action {
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: 1px solid var(--border);
-            background: var(--bg-surface);
-            color: var(--text-main);
-            cursor: pointer;
-            text-decoration: none;
-            font-size: 0.85rem;
+        .viewer-panel { min-width: 0; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow); }
+        .viewer-head { min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; border-bottom: 1px solid var(--line); background: var(--surface-raised); }
+        .viewer-heading { min-width: 0; }
+        .viewer-kicker { display: block; margin-bottom: 4px; color: var(--muted); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; }
+        .viewer-title { overflow-wrap: anywhere; margin: 0; font-size: 0.98rem; font-weight: 600; }
+        .viewer-actions { display: none; align-items: center; flex-wrap: wrap; justify-content: flex-end; gap: 7px; }
+        .viewer-actions.visible { display: flex; }
+        .action-button {
+            min-height: 34px;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 7px;
+            padding: 0 10px;
+            border: 1px solid var(--line);
+            background: var(--surface);
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 140ms ease, border-color 140ms ease, background 140ms ease;
         }
-        .btn-action:hover { border-color: var(--primary); color: var(--primary); }
-        .btn-close { border-color: rgba(239, 68, 68, 0.4); color: var(--accent-rtr); }
-        .btn-close:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--accent-rtr); color: var(--accent-rtr); }
-
-        /* Fixed Viewport Heights to Prevent Collapse */
-        .viewer-canvas {
-            flex: 1;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            height: 75vh;
-            min-height: 520px;
-        }
-
-        .viewer-frame-card {
-            width: 100%;
-            height: 100%;
-            flex: 1;
-            background: var(--bg-surface);
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
+        .action-button:hover { border-color: var(--mint); color: var(--mint); }
+        .action-button.close-button:hover { border-color: var(--red); color: var(--red); }
+        .zoom-group { display: flex; align-items: center; gap: 3px; padding: 3px; border: 1px solid var(--line); background: var(--bg); }
+        .zoom-group .icon-button { width: 29px; height: 27px; border: 0; background: transparent; }
+        .zoom-level { min-width: 38px; color: var(--text); font-size: 0.68rem; text-align: center; }
+        .viewer-canvas { min-width: 0; flex: 1; min-height: 520px; padding: 16px; }
+        .viewer-frame {
             position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 488px;
             overflow: hidden;
-            min-height: 480px;
+            border: 1px solid var(--line);
+            border-radius: 9px;
+            background: var(--bg);
         }
+        .iframe-container { position: absolute; inset: 0; transform-origin: top left; transition: transform 160ms ease; }
+        .iframe-container iframe { display: block; width: 100%; height: 100%; border: 0; background: var(--surface); }
+        .viewer-placeholder { min-height: 488px; display: grid; place-content: center; justify-items: center; padding: 24px; background-image: radial-gradient(rgba(115, 224, 195, 0.12) 1px, transparent 1px); background-size: 22px 22px; color: var(--muted); text-align: center; }
+        .placeholder-symbol { width: 68px; height: 68px; display: grid; place-items: center; margin-bottom: 18px; border: 1px solid rgba(115, 224, 195, 0.32); border-radius: 14px; background: var(--surface-raised); color: var(--mint); font-size: 1.3rem; box-shadow: var(--shadow); }
+        .viewer-placeholder h3 { margin: 0 0 7px; color: var(--text); font-size: 1.55rem; font-weight: 600; letter-spacing: 0.02em; }
+        .viewer-placeholder p { max-width: 280px; margin: 0; font-size: 0.78rem; line-height: 1.6; }
+        .viewer-footer { display: flex; justify-content: space-between; gap: 12px; padding: 0 20px 14px; color: var(--muted); font-size: 0.63rem; letter-spacing: 0.08em; text-transform: uppercase; }
+        .viewer-footer span { display: flex; align-items: center; gap: 7px; }
+        .viewer-footer i { color: var(--mint); }
 
-        .iframe-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform-origin: top left;
-            transition: transform 0.15s ease-out;
+        @media (max-width: 900px) {
+            .app-shell { padding-right: 22px; padding-left: 22px; }
+            .workspace { grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.6fr); gap: 12px; }
+            .viewer-head { align-items: flex-start; flex-direction: column; gap: 12px; }
+            .viewer-actions { justify-content: flex-start; }
         }
-
-        .iframe-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
+        @media (max-width: 680px) {
+            .app-shell { padding: 0 14px 20px; }
+            .topbar { min-height: 66px; }
+            .archive-status { font-size: 0; }
+            .status-dot { width: 8px; height: 8px; }
+            .topbar-right { gap: 12px; }
+            .page-intro { padding: 28px 0 20px; }
+            .intro-row { align-items: flex-start; flex-direction: column; gap: 10px; }
+            .intro-note { max-width: 410px; font-size: 0.78rem; }
+            .workspace { display: block; min-height: 0; }
+            .library { min-height: 460px; }
+            .workspace.has-active-doc .library { display: none; }
+            .viewer-panel { display: none; }
+            .workspace.has-active-doc .viewer-panel { display: flex; }
+            .viewer-head { padding: 14px; }
+            .viewer-actions { width: 100%; }
+            .viewer-actions.visible { justify-content: flex-start; }
+            .viewer-canvas { min-height: 58vh; padding: 10px; }
+            .viewer-frame { min-height: 56vh; }
+            .viewer-placeholder { min-height: 56vh; }
+            .viewer-footer { padding: 0 12px 12px; font-size: 0.57rem; }
         }
-
-        .theme-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
-
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2.2rem; }
-            .vault-container { flex-direction: column; min-height: auto; }
-            .sidebar { max-width: 100% !important; border-right: none; }
-            .vault-container.has-active-doc .sidebar { display: none; }
-            .main-viewer, .viewer-canvas, .viewer-frame-card { min-width: 0; }
-            
-            .main-viewer.active {
-                height: 80vh;
-                min-height: 550px;
-                border-top: 1px solid var(--border);
-            }
-            .viewer-canvas {
-                padding: 8px;
-                height: calc(80vh - 60px);
-                min-height: 500px;
-            }
-            .viewer-frame-card {
-                min-height: 480px;
-            }
-            .viewer-bar { padding: 10px 14px; }
-            .viewer-bar > div { max-width: 100%; }
-        }
-
-        .last-updated {
-            margin: -18px 0 20px;
-            color: var(--text-muted);
-            font-size: 0.50rem;
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
         }
     </style>
 </head>
 <body>
-
-    <!-- HERO SECTION -->
-    <header class="hero">
-        <div class="road-bg" id="road-bg"></div>
-
-        <div class="hero-content">
-            <div class="badge-dev">
-                <i class="fab fa-github"></i> Created by Shaztry
+    <main class="app-shell">
+        <header class="topbar">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="brand-copy">
+                    <span class="brand-name">RIDE VAULT</span>
+                    <span class="brand-sub">Personal document archive</span>
+                </div>
             </div>
-            
-            <h1 class="hero-title">RIDE VAULT</h1>
-            
-            <p class="hero-subtitle">
-                Instant, zero-delay access to Driver's License, Vehicle Registration (RC), Insurance, and Emission certificates for road checks.
-            </p>
-            
-            <p class="last-updated">
-                Last updated: <time>2026-10-20 04:31 PM</time>
-            </p>
-
-            <div class="rider-box" id="rider-box">
-                <i class="fas fa-motorcycle"></i>
+            <div class="topbar-right">
+                <span class="archive-status"><span class="status-dot"></span> Archive ready</span>
+                <button class="icon-button" type="button" onclick="toggleTheme()" title="Toggle light or dark theme" aria-label="Toggle theme">
+                    <i class="fa-solid fa-sun" id="theme-icon" aria-hidden="true"></i>
+                </button>
             </div>
+        </header>
 
-            <button class="cta-btn" onclick="scrollToVault()">
-                Get Docs <i class="fas fa-arrow-down"></i>
-            </button>
-        </div>
-    </header>
-
-    <!-- VAULT DASHBOARD -->
-    <section class="vault-section" id="vault">
-        <nav class="vault-header">
-            <div class="brand-logo">
-                <i class="fas fa-shield-halved text-primary"></i> Ride Vault
+        <section class="page-intro" aria-labelledby="page-title">
+            <div class="eyebrow">Ride Vault / Shaztry</div>
+            <div class="intro-row">
+                <h1 id="page-title">Your documents, ready.</h1>
+                <p class="intro-note">A quick-access archive for the documents you need on the road.</p>
             </div>
-            <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="t-icon"></i></button>
-        </nav>
+        </section>
 
-        <div class="vault-container" id="vault-container">
-            <!-- Sidebar -->
-            <aside class="sidebar" id="sidebar">
-                <div class="search-box">
-                    <input type="text" id="search" placeholder="Search RC, Insurance, DL..." onkeyup="filterDocs()">
+        <section class="workspace" id="workspace" aria-label="Document archive">
+            <aside class="library" aria-label="Documents">
+                <div class="library-head">
+                    <div class="section-label">
+                        <span class="section-title">Documents</span>
+                        <span class="file-count" id="file-count">09 FILES</span>
+                    </div>
+                    <label class="search-wrap">
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                        <input class="search-input" type="search" id="search" placeholder="Search archive" autocomplete="off" oninput="filterDocs()" aria-label="Search documents">
+                    </label>
                 </div>
                 <div class="doc-list" id="doc-list"></div>
             </aside>
 
-            <!-- Main Document Viewer -->
-            <main class="main-viewer" id="main-viewer">
-                <header class="viewer-bar">
-                    <h2 id="doc-title" style="font-size: 1rem; font-weight:700;">Select a Document</h2>
-                    
-                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-                        <div class="zoom-controls" id="zoom-bar">
-                            <button class="btn-action" onclick="adjustZoom(-0.25)" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
-                            <span id="zoom-level" style="font-size:0.8rem; font-weight:700; min-width:40px; text-align:center;">100%</span>
-                            <button class="btn-action" onclick="adjustZoom(0.25)" title="Zoom In"><i class="fas fa-search-plus"></i></button>
-                            <button class="btn-action" onclick="resetZoom()" title="Reset Zoom"><i class="fas fa-rotate-left"></i></button>
+            <section class="viewer-panel" aria-label="Document preview">
+                <header class="viewer-head">
+                    <div class="viewer-heading">
+                        <span class="viewer-kicker" id="viewer-kicker">Preview / Select a file</span>
+                        <h2 class="viewer-title" id="doc-title">No document selected</h2>
+                    </div>
+                    <div class="viewer-actions" id="viewer-actions">
+                        <div class="zoom-group" aria-label="Preview zoom controls">
+                            <button class="icon-button" type="button" onclick="adjustZoom(-0.25)" title="Zoom out" aria-label="Zoom out"><i class="fa-solid fa-minus"></i></button>
+                            <span class="zoom-level" id="zoom-level">100%</span>
+                            <button class="icon-button" type="button" onclick="adjustZoom(0.25)" title="Zoom in" aria-label="Zoom in"><i class="fa-solid fa-plus"></i></button>
+                            <button class="icon-button" type="button" onclick="resetZoom()" title="Reset zoom" aria-label="Reset zoom"><i class="fa-solid fa-rotate-left"></i></button>
                         </div>
-
-                        <a href="#" id="open-drive-btn" target="_blank" class="btn-action">
-                            <i class="fab fa-google-drive"></i> Open
-                        </a>
-
-                        <button class="btn-action btn-close" onclick="closeDocViewer()" title="Close Viewer">
-                            <i class="fas fa-xmark"></i> Close
-                        </button>
+                        <a href="#" id="open-drive-btn" target="_blank" rel="noopener" class="action-button"><i class="fa-brands fa-google-drive"></i> Open file</a>
+                        <button class="action-button close-button" type="button" onclick="closeDocViewer()"><i class="fa-solid fa-xmark"></i> Close</button>
                     </div>
                 </header>
-
                 <div class="viewer-canvas">
-                    <div class="viewer-frame-card" id="viewer"></div>
+                    <div class="viewer-frame" id="viewer">
+                        <div class="viewer-placeholder">
+                            <div class="placeholder-symbol"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></div>
+                            <h3>Archive preview</h3>
+                            <p>Select a document from the archive to open its secure preview here.</p>
+                        </div>
+                    </div>
                 </div>
-            </main>
-        </div>
-    </section>
+                <footer class="viewer-footer">
+                    <span><i class="fa-solid fa-lock" aria-hidden="true"></i> Private archive</span>
+                    <span>Drive preview</span>
+                </footer>
+            </section>
+        </section>
+    </main>
 
     <script>
-
-        const DOCUMENTS_MANIFEST = [
-            // Driver License
+        // EDIT ARCHIVE CONTENT HERE:
+        // New section: add a { title, icon, groups: [...] } entry to this array.
+        // New subsection: add a group with title/icon and documents or a placeholder.
+        // A single link can use group-level driveUrl; with it, placeholder becomes the link title.
+        // New or changed link: edit a document's title and driveUrl inside documents.
+        const ARCHIVE_SECTIONS = [
             {
-                id: 'dl-1',
-                title: 'Driver License',
-                category: 'Personal Identity',
-                categoryIcon: 'fa-id-badge',
-                driveUrl: 'https://drive.google.com/file/d/1Ot8xOTzVfb9RUC_rp7vpPVu3YkK-lT6C/view?usp=drivesdk',
-                icon: 'fa-id-card'
-            },
-            // Driver License from DigiLocker
-            {
-                id: 'dl-2',
-                title: 'DigiLocker Driver License',
-                category: 'Personal Identity',
-                categoryIcon: 'fa-id-badge',
-                driveUrl: 'https://drive.google.com/file/d/1CqEqcqYx74lZzhxl0-tn9QHtfi4GImu3/view?usp=drive_link',
-                icon: 'fa-id-card'
-            },
-            
-
-            // Name Change
-            {
-                id: 'name-change',
-                title: 'Name Change',
-                category: 'Affidavit',
-                categoryIcon: 'fa-id-badge',
-                driveUrl: 'https://drive.google.com/file/d/1unVXMdgFixqXWqT271VlHNA8NorD_DTV/view?usp=drive_link',
-                icon: 'fa-id-card'
-            },
-
-            // TVS Apache RTR 160 2V
-            {
-                id: 'rtr-rc',
-                title: 'Registration RC (Apache RTR 160)',
-                category: 'TVS Apache RTR 160 2V',
-                categoryIcon: 'fa-motorcycle badge-rtr',
-                driveUrl: 'https://drive.google.com/file/d/1MW6PdGRyxNlYlq5w6Xtwcqvf5ONXBPN1/view?usp=drivesdk',
-                icon: 'fa-file-contract badge-rtr'
+                title: 'Bike',
+                icon: 'fa-motorcycle',
+                open: true,
+                groups: [
+                    {
+                        title: 'DL',
+                        icon: 'fa-id-badge',
+                        documents: [
+                            { id: 'dl-1', title: 'Driver License', driveUrl: 'https://drive.google.com/file/d/1Ot8xOTzVfb9RUC_rp7vpPVu3YkK-lT6C/view?usp=drivesdk', icon: 'fa-id-card' },
+                            { id: 'dl-2', title: 'DigiLocker Driver License', driveUrl: 'https://drive.google.com/file/d/1CqEqcqYx74lZzhxl0-tn9QHtfi4GImu3/view?usp=drive_link', icon: 'fa-id-card' }
+                        ]
+                    },
+                    {
+                        title: 'RTR',
+                        icon: 'fa-motorcycle',
+                        documents: [
+                            { id: 'rtr-rc', title: 'Registration RC (Apache RTR 160)', driveUrl: 'https://drive.google.com/file/d/1MW6PdGRyxNlYlq5w6Xtwcqvf5ONXBPN1/view?usp=drivesdk', icon: 'fa-file-contract badge-rtr' },
+                            { id: 'rtr-ins', title: 'Insurance Policy (Apache RTR)', driveUrl: 'https://drive.google.com/file/d/1cUR2bsfh0rOkVby-vI7mSTSHhMh5xeRA/view?usp=drivesdk', icon: 'fa-file-shield badge-rtr' },
+                            { id: 'rtr-puc', title: 'Emission Certificate (Apache RTR)', driveUrl: 'https://drive.google.com/file/d/1zlibITeAC1hdJQQw6RzDHkKB2LJO3-rj/view?usp=drivesdk', icon: 'fa-smog badge-rtr' }
+                        ]
+                    },
+                    {
+                        title: 'Activa',
+                        icon: 'fa-gauge-high',
+                        documents: [
+                            { id: 'activa-rc', title: 'Registration RC (Honda Activa)', driveUrl: 'https://drive.google.com/file/d/1MrAnuxqsCeEDstR2avHqRVAh_7-VDfFg/view?usp=drivesdk', icon: 'fa-file-contract badge-activa' },
+                            { id: 'activa-ins', title: 'Insurance Certificate (Activa)', driveUrl: 'https://drive.google.com/file/d/147FgIkQtKzW7fWcqT7zRuLwa65g5cfqR/view?usp=drivesdk', icon: 'fa-file-shield badge-activa' },
+                            { id: 'activa-puc', title: 'Emission Certificate (Activa)', driveUrl: 'https://drive.google.com/file/d/1QbiBRbF-awVA3L0oDzmQ-1u6K282ccD5/view?usp=drivesdk', icon: 'fa-smog badge-activa' }
+                        ]
+                    }
+                ]
             },
             {
-                id: 'rtr-ins',
-                title: 'Insurance Policy (Apache RTR)',
-                category: 'TVS Apache RTR 160 2V',
-                categoryIcon: 'fa-motorcycle badge-rtr',
-                driveUrl: 'https://drive.google.com/file/d/1cUR2bsfh0rOkVby-vI7mSTSHhMh5xeRA/view?usp=drivesdk',
-                icon: 'fa-file-shield badge-rtr'
+                title: 'Aadhaar',
+                icon: 'fa-id-card',
+                groups: [
+                    { title: 'Husband', icon: 'fa-user', placeholder: 'Aadhaar Husband', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Wife', icon: 'fa-user', placeholder: 'Aadhaar Wife', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Father', icon: 'fa-user', placeholder: 'Aadhaar Father', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Mother', icon: 'fa-user', placeholder: 'Aadhaar Mother', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Atthe', icon: 'fa-user', placeholder: 'Aadhaar Atthe', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Mava', icon: 'fa-user', placeholder: 'Aadhaar Mava', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' }
+                ]
             },
             {
-                id: 'rtr-puc',
-                title: 'Emission Certificate (Apache RTR)',
-                category: 'TVS Apache RTR 160 2V',
-                categoryIcon: 'fa-motorcycle badge-rtr',
-                driveUrl: 'https://drive.google.com/file/d/1zlibITeAC1hdJQQw6RzDHkKB2LJO3-rj/view?usp=drivesdk',
-                icon: 'fa-smog badge-rtr'
-            },
-
-            // Honda Activa 3G
-            {
-                id: 'activa-rc',
-                title: 'Registration RC (Honda Activa)',
-                category: 'Honda Activa 3G',
-                categoryIcon: 'fa-gauge-high badge-activa',
-                driveUrl: 'https://drive.google.com/file/d/1MrAnuxqsCeEDstR2avHqRVAh_7-VDfFg/view?usp=drivesdk',
-                icon: 'fa-file-contract badge-activa'
+                title: 'Marks cards',
+                icon: 'fa-graduation-cap',
+                message: 'Coming soon'
             },
             {
-                id: 'activa-ins',
-                title: 'Insurance Certificate (Activa)',
-                category: 'Honda Activa 3G',
-                categoryIcon: 'fa-gauge-high badge-activa',
-                driveUrl: 'https://drive.google.com/file/d/147FgIkQtKzW7fWcqT7zRuLwa65g5cfqR/view?usp=drivesdk',
-                icon: 'fa-file-shield badge-activa'
-            },
-            {
-                id: 'activa-puc',
-                title: 'Emission Certificate (Activa)',
-                category: 'Honda Activa 3G',
-                categoryIcon: 'fa-gauge-high badge-activa',
-                driveUrl: 'https://drive.google.com/file/d/1QbiBRbF-awVA3L0oDzmQ-1u6K282ccD5/view?usp=drivesdk',
-                icon: 'fa-smog badge-activa'
+                title: 'Other documents',
+                icon: 'fa-folder',
+                groups: [
+                    {
+                        title: 'Affidavit',
+                        icon: 'fa-id-badge',
+                        documents: [
+                            { id: 'name-change', title: 'Name Change', driveUrl: 'https://drive.google.com/file/d/1unVXMdgFixqXWqT271VlHNA8NorD_DTV/view?usp=drive_link', icon: 'fa-file-signature' }
+                        ]
+                    }
+                ]
             }
         ];
+
+        const DOCUMENTS_MANIFEST = ARCHIVE_SECTIONS.flatMap(section =>
+            (section.groups || []).flatMap(group => {
+                const documents = [...(group.documents || [])];
+                if (group.driveUrl) {
+                    documents.push({
+                        id: `${section.title}-${group.title}`.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                        title: group.placeholder || group.title,
+                        driveUrl: group.driveUrl,
+                        icon: group.documentIcon || group.icon || 'fa-file'
+                    });
+                }
+                return documents.map(doc => ({ ...doc, section: section.title, category: group.title }));
+            })
+        );
 
         let activeDoc = null;
         let currentZoom = 1;
 
-        // Scroll-Driven Road & Bike Driving Effect
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const roadBg = document.getElementById('road-bg');
-            const riderBox = document.getElementById('rider-box');
-            
-            if (roadBg) {
-                roadBg.style.backgroundPositionY = `${scrollY * 1.2}px`;
-            }
-            if (riderBox) {
-                const moveY = Math.min(scrollY * 0.25, 80);
-                const scaleVal = 1 + Math.min(scrollY * 0.0008, 0.25);
-                riderBox.style.transform = `translateY(${moveY}px) scale(${scaleVal})`;
-            }
-        });
-
-        function scrollToVault() {
-            document.getElementById('vault').scrollIntoView({ behavior: 'smooth' });
+        function createDisclosure(title, icon, count, className, isOpen) {
+            const disclosure = document.createElement('details');
+            disclosure.className = className;
+            disclosure.open = isOpen;
+            disclosure.innerHTML = `
+                <summary>
+                    <span class="summary-icon"><i class="fa-solid ${icon}" aria-hidden="true"></i></span>
+                    <span class="summary-title">${title}</span>
+                    <span class="summary-count">${count}</span>
+                    <i class="fa-solid fa-chevron-down disclosure-arrow" aria-hidden="true"></i>
+                </summary>
+            `;
+            return disclosure;
         }
 
         function renderList(items) {
             const listEl = document.getElementById('doc-list');
-            listEl.innerHTML = '';
+            listEl.replaceChildren();
+            document.getElementById('file-count').textContent = `${String(items.length).padStart(2, '0')} FILES`;
 
-            const groups = items.reduce((acc, doc) => {
-                acc[doc.category] = acc[doc.category] || { icon: doc.categoryIcon, docs: [] };
-                acc[doc.category].docs.push(doc);
-                return acc;
-            }, {});
+            if (!items.length) {
+                const emptyMessage = document.createElement('p');
+                emptyMessage.className = 'empty-search';
+                emptyMessage.textContent = 'No matching documents.';
+                listEl.appendChild(emptyMessage);
+                return;
+            }
 
-            for (const [catName, group] of Object.entries(groups)) {
-                const catHeader = document.createElement('div');
-                catHeader.className = 'category-header';
-                catHeader.innerHTML = `<i class="fas ${group.icon}"></i> ${catName}`;
-                listEl.appendChild(catHeader);
+            const query = document.getElementById('search').value.trim();
+            for (const sectionConfig of ARCHIVE_SECTIONS) {
+                const sectionDocs = items.filter(doc => doc.section === sectionConfig.title);
+                const configuredGroups = sectionConfig.groups || [];
+                const hasPlaceholders = !query && configuredGroups.some(group => group.placeholder && !group.driveUrl);
+                if (!sectionDocs.length && !hasPlaceholders && !sectionConfig.message) continue;
 
-                group.docs.forEach(doc => {
-                    const card = document.createElement('div');
-                    card.className = `doc-card ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
-                    card.onclick = () => selectDoc(doc);
-                    card.innerHTML = `
-                        <i class="fas ${doc.icon} doc-icon"></i>
-                        <div>
-                            <div style="font-size:0.88rem; font-weight:600;">${doc.title}</div>
-                        </div>
-                    `;
-                    listEl.appendChild(card);
-                });
+                const activeInSection = activeDoc && sectionDocs.some(doc => doc.id === activeDoc.id);
+                const profileCount = configuredGroups.filter(group => group.placeholder).length;
+                const sectionCount = profileCount
+                    ? `${String(profileCount).padStart(2, '0')} PROFILES`
+                    : sectionDocs.length
+                        ? `${String(sectionDocs.length).padStart(2, '0')} FILES`
+                        : 'SOON';
+                const section = createDisclosure(
+                    sectionConfig.title,
+                    sectionConfig.icon,
+                    sectionCount,
+                    'archive-accordion',
+                    Boolean(sectionConfig.open || activeInSection || (query && sectionDocs.length))
+                );
+                const sectionContent = document.createElement('div');
+                sectionContent.className = 'accordion-content';
+
+                if (sectionConfig.message) {
+                    const message = document.createElement('div');
+                    message.className = 'coming-soon';
+                    message.textContent = sectionConfig.message;
+                    sectionContent.appendChild(message);
+                }
+
+                for (const groupConfig of configuredGroups) {
+                    const groupDocs = sectionDocs.filter(doc => doc.category === groupConfig.title);
+                    const hasPlaceholder = groupConfig.placeholder && !groupConfig.driveUrl;
+                    if (!groupDocs.length && (!hasPlaceholder || query)) continue;
+
+                    const activeInGroup = activeDoc && groupDocs.some(doc => doc.id === activeDoc.id);
+                    const groupCount = groupDocs.length
+                        ? `${groupDocs.length} FILE${groupDocs.length === 1 ? '' : 'S'}`
+                        : 'SOON';
+                    const subgroup = createDisclosure(
+                        groupConfig.title,
+                        groupConfig.icon || 'fa-folder',
+                        groupCount,
+                        'nested-accordion',
+                        Boolean(activeInGroup || (query && groupDocs.length))
+                    );
+                    const subgroupContent = document.createElement('div');
+                    subgroupContent.className = 'nested-content';
+
+                    for (const doc of groupDocs) {
+                        const card = document.createElement('button');
+                        card.type = 'button';
+                        card.className = `doc-card ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
+                        card.setAttribute('aria-current', activeDoc && activeDoc.id === doc.id ? 'true' : 'false');
+                        card.innerHTML = `
+                            <span class="doc-icon"><i class="fa-solid ${doc.icon}"></i></span>
+                            <span class="doc-card-copy"><span class="doc-title">${doc.title}</span></span>
+                            <i class="fa-solid fa-arrow-up-right-from-square doc-chevron" aria-hidden="true"></i>
+                        `;
+                        card.addEventListener('click', () => selectDoc(doc));
+                        subgroupContent.appendChild(card);
+                    }
+
+                    if (hasPlaceholder) {
+                        const message = document.createElement('div');
+                        message.className = 'coming-soon';
+                        message.textContent = groupConfig.placeholder;
+                        subgroupContent.appendChild(message);
+                    }
+
+                    subgroup.appendChild(subgroupContent);
+                    sectionContent.appendChild(subgroup);
+                }
+
+                section.appendChild(sectionContent);
+                listEl.appendChild(section);
             }
         }
 
         function selectDoc(doc) {
             activeDoc = doc;
             document.getElementById('doc-title').textContent = doc.title;
-            
-            const driveBtn = document.getElementById('open-drive-btn');
-            driveBtn.href = doc.driveUrl;
+            document.getElementById('viewer-kicker').textContent = `${doc.category} / Secure preview`;
+            document.getElementById('open-drive-btn').href = doc.driveUrl;
+            document.getElementById('viewer-actions').classList.add('visible');
 
             let previewUrl = doc.driveUrl;
             if (previewUrl.includes('/view')) {
                 previewUrl = previewUrl.replace('/view', '/preview');
             } else if (!previewUrl.includes('/preview')) {
-                previewUrl = previewUrl + '/preview';
+                previewUrl += '/preview';
             }
 
             document.getElementById('viewer').innerHTML = `
                 <div class="iframe-container" id="iframe-container">
-                    <iframe src="${previewUrl}" allow="autoplay"></iframe>
+                    <iframe src="${previewUrl}" title="${doc.title} preview" allow="autoplay"></iframe>
                 </div>
             `;
 
-            const viewerArea = document.getElementById('main-viewer');
-            const container = document.getElementById('vault-container');
-            
-            viewerArea.classList.add('active');
-            container.classList.add('has-active-doc');
-
-            if (window.innerWidth <= 768) {
-                viewerArea.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('workspace').classList.add('has-active-doc');
+            if (window.innerWidth <= 680) {
+                document.querySelector('.viewer-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-
             resetZoom();
-            renderList(DOCUMENTS_MANIFEST);
+            renderList(DOCUMENTS_MANIFEST.filter(item => item.title.toLowerCase().includes(document.getElementById('search').value.toLowerCase()) || item.category.toLowerCase().includes(document.getElementById('search').value.toLowerCase())));
         }
 
         function closeDocViewer() {
             activeDoc = null;
-            const viewerArea = document.getElementById('main-viewer');
-            const container = document.getElementById('vault-container');
-            
-            viewerArea.classList.remove('active');
-            container.classList.remove('has-active-doc');
-            document.getElementById('viewer').innerHTML = '';
-            
+            document.getElementById('workspace').classList.remove('has-active-doc');
+            document.getElementById('viewer-actions').classList.remove('visible');
+            document.getElementById('viewer-kicker').textContent = 'Preview / Select a file';
+            document.getElementById('doc-title').textContent = 'No document selected';
+            document.getElementById('viewer').innerHTML = `
+                <div class="viewer-placeholder">
+                    <div class="placeholder-symbol"><i class="fa-regular fa-folder-open" aria-hidden="true"></i></div>
+                    <h3>Archive preview</h3>
+                    <p>Select a document from the archive to open its secure preview here.</p>
+                </div>
+            `;
+            currentZoom = 1;
             renderList(DOCUMENTS_MANIFEST);
         }
 
         function adjustZoom(delta) {
-            currentZoom = Math.min(Math.max(0.75, currentZoom + delta), 3.0);
+            currentZoom = Math.min(Math.max(0.75, currentZoom + delta), 3);
             applyZoom();
         }
 
@@ -650,31 +583,25 @@
         }
 
         function applyZoom() {
-            const container = document.getElementById('iframe-container');
+            const frame = document.getElementById('iframe-container');
             const zoomText = document.getElementById('zoom-level');
-            if (container) {
-                container.style.transform = `scale(${currentZoom})`;
-                container.style.width = `${100 / currentZoom}%`;
-                container.style.height = `${100 / currentZoom}%`;
+            if (frame) {
+                frame.style.transform = `scale(${currentZoom})`;
+                frame.style.width = `${100 / currentZoom}%`;
+                frame.style.height = `${100 / currentZoom}%`;
             }
-            if (zoomText) {
-                zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
-            }
+            zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
         }
 
         function filterDocs() {
-            const q = document.getElementById('search').value.toLowerCase();
-            const filtered = DOCUMENTS_MANIFEST.filter(d => 
-                d.title.toLowerCase().includes(q) || d.category.toLowerCase().includes(q)
-            );
-            renderList(filtered);
+            const query = document.getElementById('search').value.toLowerCase();
+            renderList(DOCUMENTS_MANIFEST.filter(doc => doc.title.toLowerCase().includes(query) || doc.category.toLowerCase().includes(query)));
         }
 
         function toggleTheme() {
-            const html = document.documentElement;
-            const isDark = html.getAttribute('data-theme') === 'dark';
-            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            document.getElementById('t-icon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            document.getElementById('theme-icon').className = isDark ? 'fa-solid fa-moon' : 'fa-solid fa-sun';
         }
 
         renderList(DOCUMENTS_MANIFEST);
