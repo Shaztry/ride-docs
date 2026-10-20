@@ -373,12 +373,12 @@
                 title: 'Aadhaar',
                 icon: 'fa-id-card',
                 groups: [
-                    { title: 'Husband', icon: 'fa-user', placeholder: 'Aadhaar Husband', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Wife', icon: 'fa-user', placeholder: 'Aadhaar Wife', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Father', icon: 'fa-user', placeholder: 'Aadhaar Father', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Mother', icon: 'fa-user', placeholder: 'Aadhaar Mother', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Atthe', icon: 'fa-user', placeholder: 'Aadhaar Atthe', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
-                    { title: 'Mava', icon: 'fa-user', placeholder: 'Aadhaar Mava', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' }
+                    { title: 'Husband', icon: 'fa-user', placeholder: 'Husband', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Wife', icon: 'fa-user', placeholder: 'Wife', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Father', icon: 'fa-user', placeholder: 'Father', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Mother', icon: 'fa-user', placeholder: 'Mother', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Atthe', icon: 'fa-user', placeholder: 'Atthe', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' },
+                    { title: 'Mava', icon: 'fa-user', placeholder: 'Mava', driveUrl: 'https://drive.google.com/file/d/1WVlEyygEfNeRqwP-x6mQRCkGftNLshsX/view?usp=drive_link' }
                 ]
             },
             {
@@ -442,6 +442,20 @@
             return disclosure;
         }
 
+        function createDocumentCard(doc) {
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = `doc-card ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
+            card.setAttribute('aria-current', activeDoc && activeDoc.id === doc.id ? 'true' : 'false');
+            card.innerHTML = `
+                <span class="doc-icon"><i class="fa-solid ${doc.icon}"></i></span>
+                <span class="doc-card-copy"><span class="doc-title">${doc.title}</span></span>
+                <i class="fa-solid fa-arrow-up-right-from-square doc-chevron" aria-hidden="true"></i>
+            `;
+            card.addEventListener('click', () => selectDoc(doc));
+            return card;
+        }
+
         function renderList(items) {
             const listEl = document.getElementById('doc-list');
             listEl.replaceChildren();
@@ -491,6 +505,11 @@
                     const hasPlaceholder = groupConfig.placeholder && !groupConfig.driveUrl;
                     if (!groupDocs.length && (!hasPlaceholder || query)) continue;
 
+                    if (groupDocs.length === 1 && !hasPlaceholder) {
+                        sectionContent.appendChild(createDocumentCard(groupDocs[0]));
+                        continue;
+                    }
+
                     const activeInGroup = activeDoc && groupDocs.some(doc => doc.id === activeDoc.id);
                     const groupCount = groupDocs.length
                         ? `${groupDocs.length} FILE${groupDocs.length === 1 ? '' : 'S'}`
@@ -506,17 +525,7 @@
                     subgroupContent.className = 'nested-content';
 
                     for (const doc of groupDocs) {
-                        const card = document.createElement('button');
-                        card.type = 'button';
-                        card.className = `doc-card ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
-                        card.setAttribute('aria-current', activeDoc && activeDoc.id === doc.id ? 'true' : 'false');
-                        card.innerHTML = `
-                            <span class="doc-icon"><i class="fa-solid ${doc.icon}"></i></span>
-                            <span class="doc-card-copy"><span class="doc-title">${doc.title}</span></span>
-                            <i class="fa-solid fa-arrow-up-right-from-square doc-chevron" aria-hidden="true"></i>
-                        `;
-                        card.addEventListener('click', () => selectDoc(doc));
-                        subgroupContent.appendChild(card);
+                        subgroupContent.appendChild(createDocumentCard(doc));
                     }
 
                     if (hasPlaceholder) {
