@@ -1,117 +1,404 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ride Document Vault</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Ride Vault - Shaztry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --bg-body: #f8fafc;
-            --bg-surface: #ffffff;
-            --bg-hover: #f1f5f9;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --primary: #2563eb;
-            --radius: 10px;
-        }
-
-        [data-theme="dark"] {
-            --bg-body: #0f172a;
-            --bg-surface: #1e293b;
+            --bg-body: #0b0f17;
+            --bg-surface: #151c28;
+            --bg-card: #1e293b;
             --bg-hover: #334155;
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --border: #334155;
-            --primary: #3b82f6;
+            --border: #26334d;
+            --primary: #38bdf8;
+            --primary-glow: rgba(56, 189, 248, 0.25);
+            --accent-rtr: #ef4444;
+            --accent-activa: #eab308;
+            --radius: 14px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+        [data-theme="light"] {
+            --bg-body: #f1f5f9;
+            --bg-surface: #ffffff;
+            --bg-card: #f8fafc;
+            --bg-hover: #e2e8f0;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --primary: #0284c7;
+            --primary-glow: rgba(2, 132, 199, 0.2);
+            --accent-rtr: #dc2626;
+            --accent-activa: #ca8a04;
+        }
 
-        .sidebar { width: 340px; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
-        .sidebar-header { padding: 18px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .sidebar-header h1 { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-body); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
 
-        .search-box { padding: 12px 20px; border-bottom: 1px solid var(--border); }
-        .search-box input { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-body); color: var(--text-main); outline: none; }
+        /* HERO SECTION */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            padding: 30px 20px 50px;
+            background: radial-gradient(circle at top, var(--bg-surface) 0%, var(--bg-body) 100%);
+            overflow: hidden;
+        }
 
-        .doc-list { flex: 1; overflow-y: auto; padding: 10px 0; }
-        .category-title { padding: 12px 20px 4px; font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em; }
-        .doc-item { padding: 10px 20px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-left: 3px solid transparent; transition: 0.15s; }
-        .doc-item:hover { background: var(--bg-hover); }
-        .doc-item.active { background: var(--bg-hover); border-left-color: var(--primary); }
-        .doc-icon { color: var(--primary); width: 20px; text-align: center; font-size: 1.1rem; }
+        /* Scroll-Driven Road Track Background */
+        .road-bg {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 100%;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 30px,
+                var(--border) 30px,
+                var(--border) 60px
+            );
+            background-position-y: 0px;
+            opacity: 0.35;
+            z-index: 1;
+            will-change: background-position-y;
+        }
 
-        .main { flex: 1; display: flex; flex-direction: column; background: var(--bg-body); }
-        .header { padding: 12px 20px; background: var(--bg-surface); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .badge-dev {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 14px;
+            border-radius: 30px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            font-size: 0.82rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .hero-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            padding: 0 10px;
+        }
+
+        /* Scroll-Driven Rider Movement */
+        .rider-box {
+            position: relative;
+            z-index: 2;
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin: 20px 0;
+            will-change: transform;
+            transition: transform 0.05s ease-out;
+        }
+
+        /* Action Buttons */
+        .cta-btn {
+            position: relative;
+            z-index: 2;
+            padding: 14px 32px;
+            border-radius: 40px;
+            border: none;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 25px var(--primary-glow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px var(--primary-glow);
+        }
+
+        /* VAULT DASHBOARD SECTION */
+        .vault-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-body);
+            border-top: 1px solid var(--border);
+        }
+
+        .vault-header {
+            padding: 16px 20px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .brand-logo {
+            font-size: 1.1rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vault-container {
+            display: flex;
+            flex: 1;
+            min-height: calc(100vh - 65px);
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 100%;
+            max-width: 600px;
+            background: var(--bg-surface);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .vault-container.has-active-doc .sidebar {
+            max-width: 340px;
+        }
+
+        .search-box { padding: 14px 16px; border-bottom: 1px solid var(--border); }
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-body);
+            color: var(--text-main);
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .doc-list { flex: 1; overflow-y: auto; padding: 12px 16px; }
         
-        .zoom-controls { display: flex; align-items: center; gap: 6px; background: var(--bg-body); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); }
-        .btn { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-surface); color: var(--text-main); cursor: pointer; text-decoration: none; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px; }
-        .btn:hover { border-color: var(--primary); color: var(--primary); }
-        .btn-icon { padding: 6px 10px; }
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 12px 6px;
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .doc-card {
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            transition: all 0.15s ease;
+        }
+
+        .doc-card:hover { background: var(--bg-card); border-color: var(--primary); }
+        .doc-card.active { background: var(--bg-card); border-color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .doc-icon { font-size: 1.2rem; color: var(--primary); width: 24px; text-align: center; }
+
+        /* Custom Vehicle Accent Badges */
+        .badge-rtr { color: var(--accent-rtr); }
+        .badge-activa { color: var(--accent-activa); }
+
+        /* Main Viewer Area (Hidden by Default) */
+        .main-viewer {
+            flex: 1;
+            display: none; /* Only appears when document is selected */
+            flex-direction: column;
+            background: var(--bg-body);
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .main-viewer.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .viewer-bar {
+            padding: 12px 20px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-body);
+            padding: 4px 8px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: var(--bg-surface);
+            color: var(--text-main);
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-action:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-close { border-color: rgba(239, 68, 68, 0.4); color: var(--accent-rtr); }
+        .btn-close:hover { background: rgba(239, 68, 68, 0.1); border-color: var(--accent-rtr); color: var(--accent-rtr); }
 
         .viewer-canvas { flex: 1; padding: 15px; display: flex; overflow: hidden; }
-        .viewer-card { width: 100%; height: 100%; background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: auto; position: relative; }
-        
-        /* Isolated Zoom Container */
-        .iframe-wrapper { width: 100%; height: 100%; transform-origin: top left; transition: transform 0.15s ease-out; }
-        .iframe-wrapper iframe { width: 100%; height: 100%; border: none; }
+        .viewer-frame-card { width: 100%; height: 100%; min-height: 70vh; background: var(--bg-surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: auto; position: relative; }
 
-        .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; color: var(--text-muted); }
+        .iframe-container { width: 100%; height: 100%; transform-origin: top left; transition: transform 0.15s ease-out; }
+        .iframe-container iframe { width: 100%; height: 100%; border: none; }
+
         .theme-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; }
 
         @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: 40vh; }
+            .hero-title { font-size: 2.2rem; }
+            .vault-container { flex-direction: column; min-height: auto; }
+            .sidebar { max-width: 100% !important; border-right: none; }
+            .main-viewer.active { height: 75vh; border-top: 1px solid var(--border); }
             .viewer-canvas { padding: 10px; }
-            .header { padding: 10px 15px; }
-            .zoom-controls { width: 100%; justify-content: space-between; }
+            .viewer-bar { padding: 10px 14px; }
         }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="sidebar-header">
-            <h1><i class="fas fa-motorcycle text-primary"></i> RIDE Docs</h1>
-            <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="t-icon"></i></button>
-        </div>
-        <div class="search-box">
-            <input type="text" id="search" placeholder="Search RC, DL, Insurance..." onkeyup="filterDocs()">
-        </div>
-        <div class="doc-list" id="doc-list"></div>
-    </aside>
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="road-bg" id="road-bg"></div>
 
-    <main class="main">
-        <header class="header">
-            <h2 id="doc-title" style="font-size: 1rem;">Select a Document</h2>
+        <div class="hero-content">
+            <div class="badge-dev">
+                <i class="fab fa-github"></i> Created by Shaztry
+            </div>
             
-            <div style="display: flex; gap: 8px; align-items: center;">
-                <div class="zoom-controls" id="zoom-bar" style="display:none;">
-                    <button class="btn btn-icon" onclick="adjustZoom(-0.25)" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
-                    <span id="zoom-level" style="font-size:0.8rem; font-weight:600; min-width:42px; text-align:center;">100%</span>
-                    <button class="btn btn-icon" onclick="adjustZoom(0.25)" title="Zoom In"><i class="fas fa-search-plus"></i></button>
-                    <button class="btn btn-icon" onclick="resetZoom()" title="Reset Zoom"><i class="fas fa-undo"></i></button>
-                </div>
+            <h1 class="hero-title">RIDE VAULT</h1>
+            
+            <p class="hero-subtitle">
+                Instant, zero-delay access to Driver's License, Vehicle Registration (RC), Insurance, and Emission certificates for road checks.
+            </p>
 
-                <a href="#" id="open-drive-btn" target="_blank" class="btn" style="display:none;">
-                    <i class="fab fa-google-drive"></i> Open
-                </a>
+            <div class="rider-box" id="rider-box">
+                <i class="fas fa-motorcycle"></i>
             </div>
-        </header>
 
-        <section class="viewer-canvas">
-            <div class="viewer-card" id="viewer">
-                <div class="placeholder">
-                    <i class="fas fa-id-card fa-3x" style="margin-bottom:12px; opacity:0.4;"></i>
-                    <p>Select a document from the sidebar to preview.</p>
-                </div>
+            <button class="cta-btn" onclick="scrollToVault()">
+                Get Docs <i class="fas fa-arrow-down"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- VAULT DASHBOARD -->
+    <section class="vault-section" id="vault">
+        <nav class="vault-header">
+            <div class="brand-logo">
+                <i class="fas fa-shield-halved text-primary"></i> Ride Vault
             </div>
-        </section>
-    </main>
+            <button class="theme-btn" onclick="toggleTheme()"><i class="fas fa-moon" id="t-icon"></i></button>
+        </nav>
+
+        <div class="vault-container" id="vault-container">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="search-box">
+                    <input type="text" id="search" placeholder="Search RC, Insurance, DL..." onkeyup="filterDocs()">
+                </div>
+                <div class="doc-list" id="doc-list"></div>
+            </aside>
+
+            <!-- Main Document Viewer (Appears ONLY when a document is selected) -->
+            <main class="main-viewer" id="main-viewer">
+                <header class="viewer-bar">
+                    <h2 id="doc-title" style="font-size: 1rem; font-weight:700;">Select a Document</h2>
+                    
+                    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                        <div class="zoom-controls" id="zoom-bar">
+                            <button class="btn-action" onclick="adjustZoom(-0.25)" title="Zoom Out"><i class="fas fa-search-minus"></i></button>
+                            <span id="zoom-level" style="font-size:0.8rem; font-weight:700; min-width:40px; text-align:center;">100%</span>
+                            <button class="btn-action" onclick="adjustZoom(0.25)" title="Zoom In"><i class="fas fa-search-plus"></i></button>
+                            <button class="btn-action" onclick="resetZoom()" title="Reset Zoom"><i class="fas fa-rotate-left"></i></button>
+                        </div>
+
+                        <a href="#" id="open-drive-btn" target="_blank" class="btn-action">
+                            <i class="fab fa-google-drive"></i> Open
+                        </a>
+
+                        <button class="btn-action btn-close" onclick="closeDocViewer()" title="Close Viewer">
+                            <i class="fas fa-xmark"></i> Close
+                        </button>
+                    </div>
+                </header>
+
+                <div class="viewer-canvas">
+                    <div class="viewer-frame-card" id="viewer"></div>
+                </div>
+            </main>
+        </div>
+    </section>
 
     <script>
         const DOCUMENTS_MANIFEST = [
@@ -119,88 +406,115 @@
             {
                 id: 'dl-1',
                 title: 'Driver License',
-                category: 'RIDE - Personal',
+                category: 'Personal Identity',
+                categoryIcon: 'fa-id-badge',
                 driveUrl: 'https://drive.google.com/file/d/1Ot8xOTzVfb9RUC_rp7vpPVu3YkK-lT6C/view?usp=drivesdk',
-                icon: 'fa-id-badge'
+                icon: 'fa-id-card'
             },
 
-            // TVS Apache RTR 160
+            // TVS Apache RTR 160 2V
             {
                 id: 'rtr-rc',
-                title: 'Registration RC (Apache RTR)',
-                category: 'RIDE - TVS Apache RTR 160',
+                title: 'Registration RC (Apache RTR 160)',
+                category: 'TVS Apache RTR 160 2V',
+                categoryIcon: 'fa-motorcycle badge-rtr',
                 driveUrl: 'https://drive.google.com/file/d/1MW6PdGRyxNlYlq5w6Xtwcqvf5ONXBPN1/view?usp=drivesdk',
-                icon: 'fa-motorcycle'
+                icon: 'fa-file-contract badge-rtr'
             },
             {
                 id: 'rtr-ins',
-                title: 'Insurance (Apache RTR)',
-                category: 'RIDE - TVS Apache RTR 160',
+                title: 'Insurance Policy (Apache RTR)',
+                category: 'TVS Apache RTR 160 2V',
+                categoryIcon: 'fa-motorcycle badge-rtr',
                 driveUrl: 'https://drive.google.com/file/d/1cUR2bsfh0rOkVby-vI7mSTSHhMh5xeRA/view?usp=drivesdk',
-                icon: 'fa-file-shield'
+                icon: 'fa-file-shield badge-rtr'
             },
             {
                 id: 'rtr-puc',
-                title: 'Emission Test (Apache RTR)',
-                category: 'RIDE - TVS Apache RTR 160',
+                title: 'Emission Certificate (Apache RTR)',
+                category: 'TVS Apache RTR 160 2V',
+                categoryIcon: 'fa-motorcycle badge-rtr',
                 driveUrl: 'https://drive.google.com/file/d/1zlibITeAC1hdJQQw6RzDHkKB2LJO3-rj/view?usp=drivesdk',
-                icon: 'fa-smog'
+                icon: 'fa-smog badge-rtr'
             },
 
             // Honda Activa 3G
             {
                 id: 'activa-rc',
                 title: 'Registration RC (Honda Activa)',
-                category: 'RIDE - Honda Activa 3G',
+                category: 'Honda Activa 3G',
+                categoryIcon: 'fa-gauge-high badge-activa',
                 driveUrl: 'https://drive.google.com/file/d/1MrAnuxqsCeEDstR2avHqRVAh_7-VDfFg/view?usp=drivesdk',
-                icon: 'fa-car-side'
+                icon: 'fa-file-contract badge-activa'
             },
             {
                 id: 'activa-ins',
-                title: 'Insurance (Honda Activa)',
-                category: 'RIDE - Honda Activa 3G',
+                title: 'Insurance Certificate (Activa)',
+                category: 'Honda Activa 3G',
+                categoryIcon: 'fa-gauge-high badge-activa',
                 driveUrl: 'https://drive.google.com/file/d/147FgIkQtKzW7fWcqT7zRuLwa65g5cfqR/view?usp=drivesdk',
-                icon: 'fa-file-shield'
+                icon: 'fa-file-shield badge-activa'
             },
             {
                 id: 'activa-puc',
-                title: 'Emission Test (Honda Activa)',
-                category: 'RIDE - Honda Activa 3G',
+                title: 'Emission Certificate (Activa)',
+                category: 'Honda Activa 3G',
+                categoryIcon: 'fa-gauge-high badge-activa',
                 driveUrl: 'https://drive.google.com/file/d/1QbiBRbF-awVA3L0oDzmQ-1u6K282ccD5/view?usp=drivesdk',
-                icon: 'fa-smog'
+                icon: 'fa-smog badge-activa'
             }
         ];
 
         let activeDoc = null;
         let currentZoom = 1;
 
+        // Scroll-Driven Road & Bike Driving Effect
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const roadBg = document.getElementById('road-bg');
+            const riderBox = document.getElementById('rider-box');
+            
+            if (roadBg) {
+                roadBg.style.backgroundPositionY = `${scrollY * 1.2}px`;
+            }
+            if (riderBox) {
+                const moveY = Math.min(scrollY * 0.25, 80);
+                const scaleVal = 1 + Math.min(scrollY * 0.0008, 0.25);
+                riderBox.style.transform = `translateY(${moveY}px) scale(${scaleVal})`;
+            }
+        });
+
+        function scrollToVault() {
+            document.getElementById('vault').scrollIntoView({ behavior: 'smooth' });
+        }
+
         function renderList(items) {
             const listEl = document.getElementById('doc-list');
             listEl.innerHTML = '';
 
             const groups = items.reduce((acc, doc) => {
-                acc[doc.category] = acc[doc.category] || [];
-                acc[doc.category].push(doc);
+                acc[doc.category] = acc[doc.category] || { icon: doc.categoryIcon, docs: [] };
+                acc[doc.category].docs.push(doc);
                 return acc;
             }, {});
 
-            for (const [cat, docs] of Object.entries(groups)) {
-                const catEl = document.createElement('div');
-                catEl.className = 'category-title';
-                catEl.textContent = cat;
-                listEl.appendChild(catEl);
+            for (const [catName, group] of Object.entries(groups)) {
+                const catHeader = document.createElement('div');
+                catHeader.className = 'category-header';
+                catHeader.innerHTML = `<i class="fas ${group.icon}"></i> ${catName}`;
+                listEl.appendChild(catHeader);
 
-                docs.forEach(doc => {
-                    const item = document.createElement('div');
-                    item.className = `doc-item ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
-                    item.onclick = () => selectDoc(doc);
-                    item.innerHTML = `
+                group.docs.forEach(doc => {
+                    const card = document.createElement('div');
+                    card.className = `doc-card ${activeDoc && activeDoc.id === doc.id ? 'active' : ''}`;
+                    card.onclick = () => selectDoc(doc);
+                    card.innerHTML = `
                         <i class="fas ${doc.icon} doc-icon"></i>
                         <div>
-                            <div style="font-size:0.9rem; font-weight:500;">${doc.title}</div>
+                            <div style="font-size:0.88rem; font-weight:600;">${doc.title}</div>
                         </div>
                     `;
-                    listEl.appendChild(item);
+                    listEl.appendChild(card);
                 });
             }
         }
@@ -211,8 +525,6 @@
             
             const driveBtn = document.getElementById('open-drive-btn');
             driveBtn.href = doc.driveUrl;
-            driveBtn.style.display = 'inline-flex';
-            document.getElementById('zoom-bar').style.display = 'inline-flex';
 
             let previewUrl = doc.driveUrl;
             if (previewUrl.includes('/view')) {
@@ -222,12 +534,35 @@
             }
 
             document.getElementById('viewer').innerHTML = `
-                <div class="iframe-wrapper" id="iframe-wrapper">
+                <div class="iframe-container" id="iframe-container">
                     <iframe src="${previewUrl}" allow="autoplay"></iframe>
                 </div>
             `;
-            
+
+            // Reveal the Document Viewer Area
+            const viewerArea = document.getElementById('main-viewer');
+            const container = document.getElementById('vault-container');
+            viewerArea.classList.add('active');
+            container.classList.add('has-active-doc');
+
+            // Smooth scroll down to viewer on mobile
+            if (window.innerWidth <= 768) {
+                viewerArea.scrollIntoView({ behavior: 'smooth' });
+            }
+
             resetZoom();
+            renderList(DOCUMENTS_MANIFEST);
+        }
+
+        function closeDocViewer() {
+            activeDoc = null;
+            const viewerArea = document.getElementById('main-viewer');
+            const container = document.getElementById('vault-container');
+            
+            viewerArea.classList.remove('active');
+            container.classList.remove('has-active-doc');
+            document.getElementById('viewer').innerHTML = '';
+            
             renderList(DOCUMENTS_MANIFEST);
         }
 
@@ -242,12 +577,12 @@
         }
 
         function applyZoom() {
-            const wrapper = document.getElementById('iframe-wrapper');
+            const container = document.getElementById('iframe-container');
             const zoomText = document.getElementById('zoom-level');
-            if (wrapper) {
-                wrapper.style.transform = `scale(${currentZoom})`;
-                wrapper.style.width = `${100 / currentZoom}%`;
-                wrapper.style.height = `${100 / currentZoom}%`;
+            if (container) {
+                container.style.transform = `scale(${currentZoom})`;
+                container.style.width = `${100 / currentZoom}%`;
+                container.style.height = `${100 / currentZoom}%`;
             }
             if (zoomText) {
                 zoomText.textContent = `${Math.round(currentZoom * 100)}%`;
